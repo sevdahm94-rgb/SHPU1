@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Psychotropic Monitoring Guide</title>
+<style>
+:root{
+  --bg:#eef1f4; --text:#1d2329; --muted:#56616b; --panel:#ffffff; --border:#c5cdd4; --head:#e3e8ec;
+  --warn-bg:#fff8e1; --warn-bd:#c99700; --ok:#00703c; --no:#b3261e; --banner:#003087; --btn:#ffffff;
+  color-scheme: light;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15191d; --text:#e6eaee; --muted:#a2adb7; --panel:#1f252b; --border:#38424b; --head:#2a323a;
+    --warn-bg:#3a3010; --warn-bd:#b88a00; --ok:#4cc16b; --no:#ff6b6b; --banner:#00205b; --btn:#1f252b; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15191d; --text:#e6eaee; --muted:#a2adb7; --panel:#1f252b; --border:#38424b; --head:#2a323a;
+  --warn-bg:#3a3010; --warn-bd:#b88a00; --ok:#4cc16b; --no:#ff6b6b; --banner:#00205b; --btn:#1f252b; color-scheme: dark;
+}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.45}
+.wrap{max-width:1020px;margin:0 auto;padding:16px}
+.title{background:var(--banner);color:#fff;text-align:center;padding:22px 14px;border-radius:4px;margin-bottom:14px}
+.title h1{margin:0;font-size:clamp(1.6rem,4.5vw,2.6rem);font-weight:500;letter-spacing:.2px}
+.title p{margin:6px 0 0;font-size:.95rem;opacity:.85}
+.note{background:var(--warn-bg);border:1px solid var(--warn-bd);border-left-width:6px;border-radius:4px;padding:10px 14px;margin-bottom:12px;font-size:.92rem}
+.note strong{display:block;margin-bottom:2px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.88rem;color:var(--muted);margin:0 0 14px}
+.tick,.cross{font-weight:700;font-size:1.15em}
+.tick{color:var(--ok)} .cross{color:var(--no)}
+.cat{margin-bottom:22px}
+.cat-banner{color:#fff;text-align:center;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:10px;border-radius:3px;margin-bottom:12px;box-shadow:0 2px 4px rgba(0,0,0,.3)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;align-items:start}
+.grid.moods{grid-template-columns:1fr 1fr}
+@media (max-width:620px){.grid,.grid.moods{grid-template-columns:1fr}}
+.med{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;
+  color:var(--text);font-size:1rem;font-weight:600;padding:13px 16px;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.15);
+  background:var(--btn);border:1px solid var(--border);border-left:6px solid var(--ac);transition:background .15s,box-shadow .15s}
+.med:hover{background:color-mix(in srgb,var(--ac) 8%,var(--btn))}
+.med:focus-visible{outline:3px solid #ffbf00;outline-offset:2px}
+.med .chev{transition:transform .2s;font-size:.75em;color:var(--muted)}
+.med[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.med[aria-expanded="true"]{background:color-mix(in srgb,var(--ac) 12%,var(--btn));border-color:var(--ac);box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.panel{grid-column:1/-1;background:var(--panel);border:1px solid var(--border);border-left:7px solid var(--pc);border-radius:4px;padding:14px 14px 12px;
+  box-shadow:0 4px 10px rgba(0,0,0,.18);animation:drop .2s ease-out}
+@keyframes drop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.panel h2{margin:0 0 2px;font-size:1.25rem}
+.panel .sub{margin:0 0 10px;color:var(--muted);font-size:.9rem}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem;background:#fff;color:#1d2329}
+th,td{border:1px solid #000;padding:8px 10px;vertical-align:middle;text-align:left;background:#fff}
+th{background:#99cc00;color:#000;font-weight:700}
+td.c{text-align:center}
+td.p{font-weight:700;background:#ff9900;color:#000;text-align:center}
+td.p small{font-weight:400;display:block;font-size:.78rem;color:#000}
+table{table-layout:fixed}
+th:nth-child(1){width:30%}
+th:nth-child(2),th:nth-child(3),th:nth-child(4){width:23.33%}
+td.t{text-align:center}
+td.txt{font-size:.85rem}
+.notes{margin:10px 0 0;font-size:.9rem}
+.notes ul{margin:4px 0 0;padding-left:20px}
+.notes li{margin-bottom:3px}
+table .tick{color:#2e8b57;font-weight:400;font-size:1.2em}
+table .cross{color:#c62828;font-weight:700}
+.cellnote{display:block;font-size:.85rem;color:#1d2329}
+.box{margin-top:12px;border:1px solid var(--border);border-radius:4px;overflow:hidden;font-size:.9rem}
+.box h3{margin:0;padding:6px 10px;background:var(--head);font-size:.95rem}
+.box p{margin:0;padding:6px 10px}
+.warn{margin:10px 0 0;padding:8px 12px;background:var(--warn-bg);border:1px solid var(--warn-bd);border-radius:4px;font-size:.88rem}
+.close{all:unset;cursor:pointer;float:right;color:var(--muted);font-size:.85rem;padding:2px 6px;border:1px solid var(--border);border-radius:3px}
+.close:focus-visible{outline:2px solid #ffbf00}
+footer{font-size:.82rem;color:var(--muted);margin-top:8px}
+.refs{margin-top:22px;border-top:1px solid var(--border);padding-top:10px;font-size:.82rem;color:var(--muted)}
+.refs h2{font-size:.95rem;margin:0 0 4px;color:var(--text)}
+.refs ol{margin:0;padding-left:20px}
+.refs li{margin-bottom:3px}
+.refs .small{font-size:.74rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="title">
+    <h1>Psychotropic Monitoring Guide</h1>
+    <p>Antipsychotics and mood stabilisers. Select a medicine to see the required monitoring.</p>
+  </header>
+
+  <div class="note">
+    <strong>How to use</strong>
+    Select a medicine to see its monitoring requirements. The list is not exhaustive, and extra monitoring depends on individual patient risk factors. Document all results, including refusals, in the notes, and for community patients also communicate them to the GP. Confirm against the current SHPU guidance before use. National recommendations are in NICE CG178 [1]. Sources are listed at the end.
+  </div>
+  <p class="legend">
+    <span><span class="tick" aria-hidden="true">✓</span> required</span>
+    <span><span class="cross" aria-hidden="true">✗</span> not routinely required</span>
+  </p>
+
+  <section class="cat">
+    <div class="cat-banner" style="background:#005eb8;color:#fff">Antipsychotics</div>
+    <div class="grid" id="g-ap"></div>
+  </section>
+
+  <section class="cat">
+    <div class="cat-banner" style="background:#425563;color:#fff">Mood stabilisers</div>
+    <div class="grid moods" id="g-ms"></div>
+  </section>
+
+  <footer>Chlorpromazine, flupentixol, trifluoperazine and zuclopenthixol use the typical antipsychotics monitoring table [3]. Clozapine follows the SHPU clozapine guideline [2]; all other medicines follow [3].</footer>
+  <section class="refs" aria-label="References">
+    <h2>References</h2>
+    <ol>
+      <li>National Institute for Health and Care Excellence. Psychosis and schizophrenia in adults: prevention and management. Clinical guideline CG178. https://www.nice.org.uk/guidance/cg178</li>
+      <li>SHPU. Clozapine prescribing and monitoring guidelines, V4, January 2022. Appendix M: Physical health monitoring requirements for patients on clozapine.</li>
+      <li class="small">East London NHS Foundation Trust. Summary of physical health monitoring with mood stabilisers and antipsychotics.</li>
+    </ol>
+  </section>
+</div>
+
+<script>
+(function(){
+var GL="Increase frequency if evidence of elevated levels.";
+var FBCc="Repeat FBC if there are signs and symptoms of a blood dyscrasia.";
+var NMS="Repeat if there are signs and symptoms of NMS.";
+var PRL="Repeat if there are signs of raised prolactin – refer to “Trust Hyperprolactinaemia Guideline”.";
+var ECGs="If an ECG is indicated at baseline repeat at maintenance dose. Where possible offer all patients an annual ECG, especially where other risk factors exist.";
+var ECGc="Baseline ECG for all inpatients and patients with specific CV risk factors e.g. high BP.";
+var ECGa="Where possible offer all patients an annual ECG, especially where other risks exist. Baseline ECG for all patients especially if there are specific CV risk factors e.g. high BP. During therapy the need for ECG monitoring should be assessed on an individual patient basis.";
+var BPc="Monitor BP during titration if there are risk factors for postural hypotension e.g. older adults.";
+var WT="Adults: 3 monthly for first year. <18 years: monthly for 6 months, then every 6 months";
+var TFT="Baseline and annual check-up only required for patients with BPAD, and 6 monthly for rapid-cycling BPAD.";
+var KID="<18 years: monthly for 6 months, then every 6 months";
+var BPAD18="Baseline recommended for <18 years";
+// row: [parameter, baseline, first6, annual, comment, merge]  Y=tick N=cross "Y+text"=tick with text
+function std(o){ // standard second-generation/typical antipsychotic rows
+  var r=[];
+  r.push(["Blood glucose","fasting if possible","Y",o.glu||"Y","Y",GL]);
+  r.push(["Blood lipids","fasting if possible","Y",o.lip||"At 3 months","Y",GL]);
+  r.push(["FBC","","Y","N","Y",FBCc]);
+  r.push(["LFTs","","Y","N","Y",""]);
+  r.push(["U&Es","","Y","N","Y",o.ue||""]);
+  r.push(["CPK","","Y","N","N",NMS]);
+  if(o.tft) r.push(["TFTs","","","","",o.tft,"ALL"]);
+  r.push(["Prolactin","",o.plB||"Y",o.plS||"N",o.plA||"N",o.plC||PRL,o.plM]);
+  r.push(["ECG","","Y+See comments",o.ecg||ECGs,"",ECGc,"SA"]);
+  r.push(["BP and pulse","","Y",o.bp||"See comments","Y",BPc]);
+  r.push(["Weight","","Y",WT,"Y",""]);
+  return r;
+}
+function norm(sfx){return "Consider repeating level 6–12 months after initiation. "+sfx+" is associated with hyperprolactinaemia. Repeat if there are signs of raised prolactin – refer to the “Trust Hyperprolactinaemia Guideline”.";}
+var D={};
+D.amisulpride={name:"Amisulpride",rows:std({tft:TFT})};
+D.aripiprazole={name:"Aripiprazole",warn:"The table for aripiprazole in reference 3 contains wording about amisulpride (the U&Es and prolactin comments). It is reproduced as printed, so check against the original before relying on it. That table also has no TFT row and no weight or BP timing for aripiprazole.",rows:[
+ ["Blood glucose","fasting if possible","Y","Y","Y",GL],
+ ["Blood lipids","fasting if possible","Y","At 3 months","Y",GL],
+ ["FBC","","Y","N","Y",FBCc],["LFTs","","Y","N","Y",""],
+ ["U&Es","","Y","N","Y","Amisulpride is predominantly renally cleared, and so dosage reduction may need to be considered in renal failure."],
+ ["CPK","","Y","N","N",NMS],
+ ["Prolactin","","Y","Considering repeating level 6–12 months after initiation. Amisulpride is associated with hyperprolactinaemia. Repeat if there are signs of raised prolactin – refer to the “Trust Hyperprolactinaemia Guideline”.","","","SAC"],
+ ["ECG","","Y",ECGa,"","","SAC"],
+ ["BP and pulse","","Y","","Y",BPc],
+ ["Weight","","Y","","Y",""]]};
+D.clozapine={name:"Clozapine",sub:"SHPU clozapine prescribing and monitoring guidelines, Appendix M [2].",cz:true,rows:[
+ ["Glucose/HbA1c","Y","Y","Y"],
+ ["Lipid profile (total cholesterol, non-HDL, HDL, triglycerides)","Y","Y","Y"],
+ ["BP & HR","Y","Y","Y"],
+ ["QRISK3","Y","","Y"],
+ ["ECG","Y","",""],
+ ["Weight & BMI","Y+Weekly for the 1st six weeks","Y","Y"],
+ ["Waist circumference","Y","","Y"],
+ ["LFTs","Y","","Y"],
+ ["U&Es","Y","","Y"],
+ ["FBC","","","","FBC"],
+ ["Prolactin","Y","",""],
+ ["Smoking status","Y","Y","Y"],
+ ["Life style review","Y","Y","Y"],
+ ["Side effects","Y","Y","Y"]],
+ foot:"The physical health review should also be completed on the Physical health review form on INSIGHT."};
+D.haloperidol={name:"Haloperidol",rows:[
+ ["Blood glucose","fasting if possible","Y","Y","Y",GL],
+ ["Blood lipids","fasting if possible","Y","At 3 months","Y",GL],
+ ["FBC","","Y","N","Y",FBCc],["LFTs","","Y","N","Y",""],["U&Es","","Y","N","Y",""],["CPK","","Y","N","N",NMS],
+ ["Prolactin","","Y",norm("Haloperidol"),"","","SAC"],
+ ["ECG","","Y",ECGa,"","","SAC"],
+ ["BP and pulse","","Y","See comments","Y",BPc],
+ ["Weight","","Y",WT,"Y",""]]};
+D.olanzapine={name:"Olanzapine",rows:[
+ ["Blood glucose","fasting if possible","Y","At 1 and 3 months, then every 4–6 months","Y",GL],
+ ["Blood lipids","fasting if possible","Y","3 monthly for first year","Y",GL],
+ ["FBC","","Y","N","Y",FBCc],["LFTs","","Y","N","Y",""],["U&Es","","Y","N","Y",""],["CPK","","Y","N","N",NMS],
+ ["TFTs","","","","",TFT,"ALL"],
+ ["Prolactin","","Y","N","N",PRL],
+ ["ECG","","Y+See comments",ECGs,"",ECGc,"SA"],
+ ["BP and pulse","","Y","See comments","Y",BPc],
+ ["Weight","","Y",WT,"Y",""]]};
+D.quetiapine={name:"Quetiapine",rows:[
+ ["Blood glucose","fasting if possible","Y","Y","Y",GL],
+ ["Blood lipids","fasting if possible","Y","At 3 months","Y",GL],
+ ["FBC","","Y","N","Y",FBCc],["LFTs","","Y","N","Y",""],["U&Es","","Y","N","Y",""],["CPK","","Y","N","N",NMS],
+ ["TFTs","","","","",TFT+" Quetiapine is associated with small (clinically insignificant) decreases in thyroid hormone level so annual monitoring may be advisable.","ALL"],
+ ["Prolactin","","Y","N","N",PRL],
+ ["ECG","","Y+See comments",ECGs,"",ECGc,"SA"],
+ ["BP and pulse","","Y","See comments","Y",BPc],
+ ["Weight","","Y",WT,"Y",""]]};
+D.risperidone={name:"Risperidone",rows:[
+ ["Blood glucose","fasting if possible","Y","Y","Y",GL],
+ ["Blood lipids","fasting if possible","Y","At 3 months","Y",GL],
+ ["FBC","","Y","N","Y",FBCc],["LFTs","","Y","N","Y",""],["U&Es","","Y","N","Y",""],["CPK","","Y","N","N",NMS],
+ ["TFTs","","","","",TFT,"ALL"],
+ ["Prolactin","","Y",norm("Risperidone"),"","","SAC"],
+ ["ECG","","Y+See comments",ECGs,"",ECGc,"SA"],
+ ["BP and pulse","","Y","See comments","Y",BPc],
+ ["Weight","","Y",WT,"Y",""]]};
+D.typical={name:"Typical antipsychotics",sub:"Source table “Typical antipsychotics” (it says to see the separate table for haloperidol).",rows:[
+ ["Blood glucose","fasting if possible","Y","Y","Y",GL],
+ ["Blood lipids","fasting if possible","Y","At 3 months","Y",GL],
+ ["FBC","","Y","N","Y",FBCc],["LFTs","","Y","N","Y",""],["U&Es","","Y","N","Y",""],["CPK","","Y","N","N",NMS],
+ ["Prolactin","","Y","Consider repeating level 6–12 months after initiation. Typical antipsychotics are associated with hyperprolactinaemia. Repeat if there are signs of raised prolactin – refer to the “Trust Hyperprolactinaemia Guideline”.","","","SAC"],
+ ["ECG","","Y+See comments",ECGs,"",ECGc,"SA"],
+ ["BP and pulse","","Y","See comments","Y",BPc],
+ ["Weight","","Y",WT,"Y",""]]};
+D.carbamazepine={name:"Carbamazepine",rows:[
+ ["Blood glucose","fasting if possible","Y","N","Y",""],
+ ["Blood lipids","fasting if possible","Y","N","Y+See comments","Only required for patients >40 years"],
+ ["FBC","","Y","Y","Y","Monitor for signs of leucopenia, rashes, infection and fever. Repeat FBC if there are signs and symptoms of a blood dyscrasia."],
+ ["LFTs","","Y","Y","Y",""],
+ ["U&Es and renal function (RF)","","Y","Y","Y","Check U&Es and RF every 6 months."],
+ ["TFTs","","","","",TFT,"ALL"],
+ ["Prolactin","",BPAD18,"N","N",""],
+ ["ECG","","If indicated by history or clinical picture","N","N",""],
+ ["BP and pulse","","Y","N","Y",""],
+ ["Weight","","Y","Y+"+KID,"Y",""]],
+ tdm:["Therapeutic drug monitoring for carbamazepine","Check level 2 weeks after initiation and 2 weeks after every dose change. Once stabilised, check carbamazepine levels every 6 months. Time to steady state: approximately two weeks; carbamazepine induces its own metabolism, so time to steady state depends on autoinduction. Usual target range is 7–12 mg/L (refer also to the local laboratory reference range), for affective illness. Sample time: trough levels."]};
+D.lamotrigine={name:"Lamotrigine",sub:"Medical advice should be sought immediately if a rash develops.",rows:[
+ ["Blood glucose","fasting if possible","Y","N","Y",""],
+ ["Blood lipids","fasting if possible","Y","N","Y+See comments","Only required for patients >40 years"],
+ ["FBC","","Y","N","Y",FBCc],["LFTs","","Y","N","Y",""],
+ ["U&Es and renal function (RF)","","Y","N","Y",""],
+ ["TFTs","","","","",TFT,"ALL"],
+ ["Prolactin","",BPAD18,"N","N",""],
+ ["ECG","","If indicated by history or clinical picture","N","N",""],
+ ["BP and pulse","","Y","N","Y",""],
+ ["Weight","","Y",KID,"Y",""]]};
+D.lithium={name:"Lithium",sub:"Ensure the patient has been given a “Lithium Alert Card” and “Lithium Record Book”.",rows:[
+ ["Blood glucose","fasting if possible","Y","N","Y","Fasting level if possible."],
+ ["Blood lipids","fasting if possible","Y","N","Y+See comments","Only required for patients >40 years"],
+ ["FBC","","Y","N","N",FBCc],["LFTs","","Y","N","N",""],
+ ["U&Es and renal function (RF)","","Y","Y","Y","Check RF every 6 months. Increase monitoring if abnormal, if there is evidence of deterioration, or if medicines that can affect lithium level (such as ACE inhibitors, diuretics, NSAIDs) are initiated."],
+ ["TFTs","","Y","Y","Y","Repeat every 6 months, and more often if evidence of deterioration."],
+ ["Prolactin","",BPAD18,"N","N",""],
+ ["ECG","","Y","The need for further monitoring should be assessed on an individual basis.","","","SA"],
+ ["BP and pulse","","Y","N","Y",""],
+ ["Weight","","Y",KID,"Y","Additional follow-up monitoring for adults only required if there is rapid weight gain."]],
+ tdm:["Therapeutic drug monitoring of lithium levels","Time to steady state: 5 to 7 days. Check lithium level one week after initiating treatment and every week until the level is at the desired therapeutic level. Target level depends on age and illness; the usual therapeutic level is stated as 0.4 mmol/L (refer also to the local laboratory reference range). A very small number of people may need slightly higher levels. Follow up: once stabilised, NICE recommended checking levels every 3 months, although 6 months may be adequate for stable, concordant patients who understand the risks of toxicity and how to manage them. Check more frequently in the elderly, if there are signs of toxicity, relapse or intercurrent infection, or after significant change in sodium or fluid intake. Check 5 to 7 days after every change in dose or brand, or after starting or stopping other medicines that may affect lithium level (e.g. diuretics, NSAIDs, ACE inhibitors). Sample time: 12 hours post dose."]};
+D.valproate={name:"Valproate",rows:[
+ ["Blood glucose","fasting if possible","Y","N","Y",GL],
+ ["Blood lipids","fasting if possible","Y","At 3 months","Y+See comments","Only required for patients >40 years."],
+ ["FBC","","Y","Y","Y",FBCc],
+ ["LFTs","","Y","Y","Y","Periodically monitor LFTs during the first 6 months of therapy, especially in those most at risk and those with a prior history of liver disease."],
+ ["U&Es and renal function (RF)","","Y","N","Y",""],
+ ["TFTs","","","","",TFT,"ALL"],
+ ["Prolactin","",BPAD18,"N","N",""],
+ ["ECG","","If indicated by history or clinical picture","N","N",""],
+ ["BP and pulse","","Y","N","Y",""],
+ ["Weight","","Y",WT,"Y",""]],
+ tdm:["Therapeutic drug monitoring of valproate level","Valproate levels are not routinely required. They may be of use if there is evidence of ineffectiveness, poor adherence or toxicity. Time to steady state: 2 to 3 days. Usual target range is 50–100 mg/L (refer to the local laboratory reference range). Sample time: trough levels."]};
+
+// buttons: label, data key (or null), group
+var AP=[["Amisulpride","amisulpride","","#003087"],["Aripiprazole","aripiprazole","","#005eb8"],
+ ["Chlorpromazine","typical","","#0072ce"],["Clozapine","clozapine","","#330072"],
+ ["Flupentixol","typical","","#7c2855"],["Haloperidol","haloperidol","","#00a499"],
+ ["Olanzapine","olanzapine","","#006747"],["Quetiapine","quetiapine","","#425563"],
+ ["Risperidone","risperidone","","#ed8b00"],["Trifluoperazine","typical","","#768692"],
+ ["Zuclopenthixol","typical","","#41b6e6"]];
+var MS=[["Carbamazepine","carbamazepine","","#8a1538"],["Lamotrigine","lamotrigine","","#ae2573"],
+ ["Lithium","lithium","","#009639"],["Valproate","valproate","","#c99700"]];
+
+function tickHtml(v){
+  v=String(v).replace(/See [Cc]omments/,"See notes");
+  if(v==="Y") return '<span class="tick" role="img" aria-label="Required">✓</span>';
+  if(v==="N") return '<span class="cross" role="img" aria-label="Not routinely required">✗</span>';
+  if(v.indexOf("Y+")===0) return '<span class="tick" role="img" aria-label="Required">✓</span><span class="cellnote">'+esc(v.slice(2))+'</span>';
+  return esc(v);
+}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function td(v,extra){var simple=(v==="Y"||v==="N"||v.indexOf("Y+")===0||v==="");return '<td'+(simple&&v!==""&&v.indexOf("Y+")!==0?' class="c"':'')+(extra||'')+'>'+tickHtml(v)+'</td>';}
+function cellOf(v){
+  if(v==="") return '<td></td>';
+  var big=!(v==="Y"||v==="N"||v.indexOf("Y+")===0);
+  return '<td class="t'+(big?' txt':'')+'">'+tickHtml(v)+'</td>';
+}
+function buildTable(rows){
+  var notes=[],idx={};
+  function addNote(n,c){ if(idx[c]===undefined){idx[c]=notes.length;notes.push([c,[]]);} notes[idx[c]][1].push(n); }
+  var h='<div class="scroll"><table><thead><tr><th>Parameter</th><th>Baseline</th><th>First 6 months</th><th>Annually</th></tr></thead><tbody>';
+  rows.forEach(function(r){
+    var name=r[0],m=r[6],B=r[2],S=r[3],A=r[4],C=r[5],c;
+    var p='<td class="p">'+esc(name)+(r[1]?'<small>('+esc(r[1])+')</small>':'')+'</td>';
+    if(m==="ALL"){ c='<td colspan="3">'+esc(C)+'</td>'; C=""; }
+    else if(m==="SAC"||m==="SA") c=cellOf(B)+'<td colspan="2" class="t txt">'+esc(S)+'</td>';
+    else c=cellOf(B)+cellOf(S)+cellOf(A);
+    if(C) addNote(name,C);
+    h+='<tr>'+p+c+'</tr>';
+  });
+  h+='</tbody></table></div>';
+  if(notes.length){
+    h+='<div class="notes"><strong>Notes</strong><ul>'+notes.map(function(n){return '<li><strong>'+esc(n[1].join(", "))+':</strong> '+esc(n[0])+'</li>';}).join('')+'</ul></div>';
+  }
+  return h;
+}
+function buildCz(d){
+  var h='<div class="scroll"><table><thead><tr><th>Parameter</th><th>Baseline</th><th>12 weeks</th><th>Annually</th></tr></thead><tbody>';
+  d.rows.forEach(function(r){
+    if(r[4]==="FBC"){
+      h+='<tr><td class="p">FBC</td><td colspan="3">The frequency that FBC need to be checked depends on the length of treatment<ul style="margin:4px 0 0;padding-left:22px"><li><strong>Baseline</strong> prior to starting clozapine (valid for 10 days)</li><li><strong>Weekly</strong> for the first 18 weeks of treatment</li><li><strong>Fortnightly</strong> between weeks 18 and 52 weeks treatment</li><li><strong>After 1 year</strong> of treatment with stable neutrophil counts, patients may be monitored at least at 4 week intervals</li></ul></td></tr>';
+    } else {
+      h+='<tr><td class="p">'+esc(r[0])+'</td>'+[1,2,3].map(function(i){var v=r[i];
+        if(v==="") return '<td></td>';
+        return '<td class="t">'+tickHtml(v)+'</td>';}).join('')+'</tr>';
+    }
+  });
+  h+='</tbody></table></div>';
+  if(d.foot) h+='<p style="margin:8px 0 0;font-weight:700;font-size:.9rem">Note: '+esc(d.foot)+'</p>';
+  return h;
+}
+function panelFor(label,key,color){
+  var p=document.createElement("div"); p.className="panel"; p.setAttribute("role","region"); p.setAttribute("aria-label",label+" monitoring"); p.style.setProperty("--pc",color);
+  var html='<button class="close" type="button">Close ✕</button>';
+  var d=D[key];
+  html+='<h2>'+esc(label)+'</h2>';
+  var sub=d.sub||"";
+  if(key==="typical") sub="Typical antipsychotics monitoring table [3] (see the separate haloperidol table).";
+  if(!sub) sub="Reference [3].";
+  html+='<p class="sub">'+esc(sub)+'</p>';
+  html+=(d.cz?buildCz(d):buildTable(d.rows));
+  if(d.warn) html+='<div class="warn"><strong>Check the source:</strong> '+esc(d.warn)+'</div>';
+  if(d.tdm) html+='<div class="box"><h3>'+esc(d.tdm[0])+'</h3><p>'+esc(d.tdm[1])+'</p></div>';
+  p.innerHTML=html; return p;
+}
+function make(gridId,list){
+  var grid=document.getElementById(gridId);
+  list.forEach(function(it){
+    var b=document.createElement("button"); b.type="button"; b.className="med";
+    b.style.setProperty("--ac",it[3]);
+    b.setAttribute("aria-expanded","false");
+    b.innerHTML='<span>'+esc(it[0])+'</span><span class="chev" aria-hidden="true">▼</span>';
+    b.addEventListener("click",function(){toggle(grid,b,it[0],it[1],it[3]);});
+    grid.appendChild(b);
+  });
+}
+function closeAll(grid){
+  Array.prototype.forEach.call(grid.querySelectorAll(".panel"),function(p){p.remove();});
+  Array.prototype.forEach.call(grid.querySelectorAll(".med"),function(m){m.setAttribute("aria-expanded","false");});
+}
+function toggle(grid,btn,label,key,color){
+  var wasOpen=btn.getAttribute("aria-expanded")==="true";
+  // close panels in all grids so only one is open
+  Array.prototype.forEach.call(document.querySelectorAll(".grid"),closeAll);
+  if(wasOpen) return;
+  var btns=Array.prototype.slice.call(grid.querySelectorAll(".med"));
+  var cols=getComputedStyle(grid).gridTemplateColumns.split(" ").length||1;
+  var idx=btns.indexOf(btn), end=Math.min(idx-(idx%cols)+cols-1,btns.length-1);
+  var panel=panelFor(label,key,color);
+  btns[end].after(panel);
+  btn.setAttribute("aria-expanded","true");
+  panel.querySelector(".close").addEventListener("click",function(){closeAll(grid);btn.focus();});
+  panel.scrollIntoView({block:"nearest",behavior:"smooth"});
+}
+make("g-ap",AP);
+make("g-ms",MS);
+var rt,lastW=window.innerWidth;window.addEventListener("resize",function(){if(window.innerWidth===lastW)return;lastW=window.innerWidth;clearTimeout(rt);rt=setTimeout(function(){Array.prototype.forEach.call(document.querySelectorAll(".grid"),closeAll);},200);});
+})();
+</script>
+</body>
+</html>
